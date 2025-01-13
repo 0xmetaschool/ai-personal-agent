@@ -27,7 +27,7 @@ export default function Landing() {
           </p>
           <a
             href="/chat"
-            className="inline-flex bg-blue-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-600 transition-colors duration-300 items-center gap-2"
+            className="inline-flex bg-blue-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-blue-700 transition-colors duration-300 items-center gap-2"
           >
             Get Started
             <svg
