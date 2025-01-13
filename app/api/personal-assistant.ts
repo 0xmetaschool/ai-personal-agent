@@ -8,6 +8,47 @@ interface AssistantConfig {
   serpApiKey: string;
 }
 
+interface WeatherResponse {
+  main: {
+    temp: number;
+    feels_like: number;
+    humidity: number;
+  };
+  weather: Array<{
+    description: string;
+  }>;
+  wind: {
+    speed: number;
+  };
+  name: string;
+  sys: {
+    country: string;
+  };
+}
+
+interface KnowledgeGraphResult {
+  title: string;
+  description: string;
+}
+
+interface OrganicResult {
+  title: string;
+  snippet: string;
+  link: string;
+}
+
+interface SearchResult {
+  title: string;
+  snippet: string;
+  type: string;
+  link?: string;
+}
+
+interface SerpApiResponse {
+  knowledge_graph?: KnowledgeGraphResult;
+  organic_results?: OrganicResult[];
+}
+
 export class PersonalAssistant {
   private openai: OpenAI;
   private weatherApiKey: string;
@@ -28,7 +69,7 @@ export class PersonalAssistant {
       const response = await fetch(url);
       
       if (response.ok) {
-        const data = await response.json();
+        const data = await response.json() as WeatherResponse;
         return {
           temperature: data.main.temp,
           description: data.weather[0].description,
@@ -48,7 +89,7 @@ export class PersonalAssistant {
     }
   }
 
-  async searchWeb(query: string) {
+  async searchWeb(query: string): Promise<SearchResult[]> {
     try {
       const cleanedQuery = query.trim();
       const encodedQuery = encodeURIComponent(cleanedQuery);
@@ -57,8 +98,8 @@ export class PersonalAssistant {
       const response = await fetch(url);
       
       if (response.ok) {
-        const data = await response.json();
-        const results = [];
+        const data = await response.json() as SerpApiResponse;
+        const results: SearchResult[] = [];
         
         if (data.knowledge_graph?.description) {
           results.push({
@@ -69,7 +110,7 @@ export class PersonalAssistant {
         }
 
         if (data.organic_results) {
-          results.push(...data.organic_results.slice(0, 4).map((result: any) => ({
+          results.push(...data.organic_results.slice(0, 4).map((result) => ({
             title: result.title || '',
             snippet: result.snippet || '',
             link: result.link || '',
