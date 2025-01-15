@@ -14,6 +14,7 @@ interface TypingEffectProps {
   speed?: number;
 }
 
+// Set typing effect on output screen
 const TypingEffect = ({ text, speed = 30 }: TypingEffectProps) => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -39,6 +40,7 @@ const TypingEffect = ({ text, speed = 30 }: TypingEffectProps) => {
   );
 };
 
+// Setting up the Chat interface
 const ChatInterface = () => {
   const [audioUrl, setAudioUrl] = useState<string>("");
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -150,7 +152,8 @@ const ChatInterface = () => {
       setIsLoading(false);
     }
   };
-
+  
+  // Send audio request to speak API
   const sendAudioToBackend = async (audioBlob: Blob) => {
     setIsLoading(true);
     const formData = new FormData();
